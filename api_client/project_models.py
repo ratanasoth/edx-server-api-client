@@ -6,7 +6,7 @@ from . import project_api, course_api
 
 
 class Project(JsonObject):
-    #required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
+    # required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
 
     def add_workgroup(self, workgroup_id):
         if workgroup_id not in self.workgroups:

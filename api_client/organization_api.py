@@ -12,6 +12,7 @@ from .json_requests import GET, POST, DELETE, PATCH
 
 ORGANIZATION_API = getattr(settings, 'ORGANIZATION_API', 'api/server/organizations')
 
+
 @api_error_protect
 def create_organization(organization_name, organization_data=None, organization_object=JsonObject):
     ''' create a new organization '''
@@ -45,6 +46,7 @@ def fetch_organization(organization_id, organization_object=JsonObject):
 
     return JP.from_json(response.read(), organization_object)
 
+
 @api_error_protect
 def get_users_by_enrolled(organization_id, user_object=JsonObject):
     ''' fetch organization users list, with additional courses enrolled flag '''
@@ -58,11 +60,13 @@ def get_users_by_enrolled(organization_id, user_object=JsonObject):
 
     return JP.from_json(response.read(), user_object)
 
+
 @api_error_protect
 def fetch_organization_from_url(url, organization_object=JsonObject):
     ''' fetch organization by id '''
     response = GET(url)
     return JP.from_json(response.read(), organization_object)
+
 
 @api_error_protect
 def get_organizations(organization_object=JsonObject):
@@ -75,6 +79,7 @@ def get_organizations(organization_object=JsonObject):
     )
 
     return JP.from_json(response.read(), organization_object)
+
 
 @api_error_protect
 def get_organization_groups(organization_id, groups_object=JsonObject, *args, **kwargs):
@@ -93,6 +98,7 @@ def get_organization_groups(organization_id, groups_object=JsonObject, *args, **
 
     return JP.from_json(response.read(), groups_object)
 
+
 @api_error_protect
 def delete_organization(organization_id):
     ''' delete organization by id '''
@@ -105,6 +111,7 @@ def delete_organization(organization_id):
     )
 
     return (response.code == 204)
+
 
 @api_error_protect
 def update_organization(organization_id, organization_data, organization_object=JsonObject):
@@ -119,6 +126,7 @@ def update_organization(organization_id, organization_data, organization_object=
     )
 
     return JP.from_json(response.read(), organization_object)
+
 
 @api_error_protect
 def get_grade_complete_count(organization_id, organization_object=JsonObject, *args, **kwargs):

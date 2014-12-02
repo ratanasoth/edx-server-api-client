@@ -52,7 +52,7 @@ class ApiError(Exception):
                 context_name,
                 self.context[context_name]
             )
-            for context_name in self.context]
+                for context_name in self.context]
         )
         return "ApiError '{}' ({}) - {}({})".format(
             self.message,

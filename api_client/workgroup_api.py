@@ -14,6 +14,7 @@ from . import course_models
 
 WORKGROUP_API = getattr(settings, 'WORKGROUP_API', 'api/server/workgroups')
 
+
 @api_error_protect
 def get_workgroups(group_object=JsonObject):
     ''' gets all workgroups'''
@@ -25,6 +26,7 @@ def get_workgroups(group_object=JsonObject):
     )
 
     return JP.from_json(response.read(), group_object)
+
 
 @api_error_protect
 def get_workgroups_for_project(project_id):
@@ -45,6 +47,7 @@ def get_workgroup(workgroup_id, group_object=JsonObject):
 
     return JP.from_json(response.read(), group_object)
 
+
 @api_error_protect
 def delete_workgroup(workgroup_id):
     ''' delete workgroup by id '''
@@ -57,6 +60,7 @@ def delete_workgroup(workgroup_id):
     )
 
     return (response.code == 204)
+
 
 @api_error_protect
 def create_workgroup(workgroup_name, workgroup_data, group_object=JsonObject):
@@ -90,6 +94,7 @@ def update_workgroup(workgroup_id, workgroup_data, group_object=JsonObject):
 
     return JP.from_json(response.read(), group_object)
 
+
 @api_error_protect
 def add_user_to_workgroup(workgroup_id, user_id):
     response = POST(
@@ -102,6 +107,7 @@ def add_user_to_workgroup(workgroup_id, user_id):
     )
 
     return (response.code == 201)
+
 
 @api_error_protect
 def remove_user_from_workgroup(workgroup_id, user_id):
@@ -116,6 +122,7 @@ def remove_user_from_workgroup(workgroup_id, user_id):
 
     return (response.code == 204)
 
+
 @api_error_protect
 def get_workgroup_users(workgroup_id, group_object=JsonObject):
     response = GET(
@@ -127,6 +134,7 @@ def get_workgroup_users(workgroup_id, group_object=JsonObject):
     )
 
     return JP.from_json(response.read(), group_object)
+
 
 @api_error_protect
 def add_group_to_workgroup(workgroup_id, group_id):
@@ -141,6 +149,7 @@ def add_group_to_workgroup(workgroup_id, group_id):
 
     return (response.code == 201)
 
+
 @api_error_protect
 def get_workgroup_groups(workgroup_id, group_object=JsonObject):
     response = GET(
@@ -153,6 +162,7 @@ def get_workgroup_groups(workgroup_id, group_object=JsonObject):
 
     return JP.from_json(response.read(), group_object)
 
+
 @api_error_protect
 def get_workgroup_submissions(workgroup_id, submission_object=JsonObject):
     response = GET(
@@ -164,6 +174,7 @@ def get_workgroup_submissions(workgroup_id, submission_object=JsonObject):
     )
 
     return JP.from_json(response.read(), submission_object)
+
 
 def get_latest_workgroup_submissions_by_id(workgroup_id, submission_object=JsonObject):
     submission_list = get_workgroup_submissions(workgroup_id, submission_object)
@@ -178,6 +189,7 @@ def get_latest_workgroup_submissions_by_id(workgroup_id, submission_object=JsonO
             submissions_by_id[submission_id] = submission
 
     return submissions_by_id
+
 
 @api_error_protect
 def get_workgroup_review_items(workgroup_id):

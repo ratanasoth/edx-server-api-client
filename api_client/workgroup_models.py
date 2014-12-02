@@ -4,8 +4,9 @@ from datetime import datetime
 from .json_object import JsonObject
 import workgroup_api
 
+
 class Workgroup(JsonObject):
-    #required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
+    # required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
 
     ''' object representing a organization from api json response '''
     @classmethod

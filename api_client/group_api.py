@@ -15,6 +15,7 @@ from . import course_models
 
 GROUP_API = getattr(settings, 'GROUP_API', 'api/server/groups')
 
+
 @api_error_protect
 def get_groups_of_type(group_type, group_object=JsonObject, *args, **kwargs):
     ''' gets all groups of provided type'''
@@ -90,6 +91,7 @@ def delete_group(group_id):
 
     return (response.code == 204)
 
+
 @api_error_protect
 def update_group(group_id, group_name, group_type, group_data=None, group_object=JsonObject):
     ''' update existing group '''
@@ -111,6 +113,7 @@ def update_group(group_id, group_name, group_type, group_data=None, group_object
     )
 
     return JP.from_json(response.read(), group_object)
+
 
 @api_error_protect
 def add_user_to_group(user_id, group_id, group_object=JsonObject):
@@ -178,6 +181,7 @@ def get_users_in_group(group_id):
 
     return user_list.users
 
+
 @api_error_protect
 def remove_user_from_group(user_id, group_id):
     ''' remove user association with a specific group '''
@@ -193,6 +197,7 @@ def remove_user_from_group(user_id, group_id):
 
     return (response.code == 204)
 
+
 @api_error_protect
 def remove_course_from_group(course_id, group_id, group_object=JsonObject):
     ''' removes course from group '''
@@ -207,6 +212,7 @@ def remove_course_from_group(course_id, group_id, group_object=JsonObject):
     )
 
     return (response.code == 204)
+
 
 @api_error_protect
 def get_courses_in_group(group_id):
@@ -240,6 +246,7 @@ def get_groups_in_group(group_id, group_object=JsonObject, *args, **kwargs):
 
     return JP.from_json(response.read(), group_object)
 
+
 @api_error_protect
 def get_organizations_in_group(group_id, group_object=JsonObject):
     response = GET(
@@ -251,6 +258,7 @@ def get_organizations_in_group(group_id, group_object=JsonObject):
     )
 
     return JP.from_json(response.read(), group_object)
+
 
 @api_error_protect
 def get_workgroups_in_group(group_id, group_object=JsonObject):

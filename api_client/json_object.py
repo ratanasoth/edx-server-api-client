@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 
 
-class DataOnly(object):pass
+class DataOnly(object):
+    pass
 
 
 # ignore too few public methods witin this file - these models almost always
@@ -145,6 +146,7 @@ class JsonObject(Objectifier):
                     remove_fields.append(element)
             for remove_field in remove_fields:
                 del dictionary[remove_field]
+
 
 class JsonParser(object):
 

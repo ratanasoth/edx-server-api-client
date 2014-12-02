@@ -1,7 +1,8 @@
 ''' Tests for api_client calls '''
 from datetime import datetime
 from django.test import TestCase
-from .json_object import JsonParser as JP, DataOnly, JsonObject, MissingRequiredFieldError, CategorisedJsonParser, CategorisedJsonObject
+from .json_object import JsonParser as JP, DataOnly, JsonObject, MissingRequiredFieldError
+from .json_object import CategorisedJsonParser, CategorisedJsonObject
 from .user_models import UserResponse, AuthenticationResponse
 from .course_models import Course, Chapter
 from .group_models import GroupInfo
@@ -10,7 +11,9 @@ import collections
 
 # disable no-member 'cos the members are getting created from the json
 # and some others that we don't care about for tests
-# pylint: disable=no-member,line-too-long,too-few-public-methods,missing-docstring,too-many-public-methods,pointless-statement
+# pylint:
+# disable=no-member,line-too-long,too-few-public-methods,missing-docstring,too-many-public-methods,pointless-statement
+
 
 class JsonObjectTestRequiredFieldsClass(JsonObject):
     required_fields = ['name', 'age']
@@ -61,12 +64,15 @@ class JsonObjectTest(TestCase):
         self.json_array = '[{"name":"Martyn", "age":21},{"name":"Matt", "age":19}]'
 
         self.nested_json = '{"id":22, "info":{"one":"a", "two":"b", "three":"c"}}'
-        self.nested_array = '[{"id":22, "info":{"one":"a", "two":"b", "three":"c"}},{"id":23, "info":{"one":"x", "two":"y", "three":"z"}}]'
+        self.nested_array = ('[{"id":22, "info":{"one":"a", "two":"b", "three":"c"}},'
+                             '{"id":23, "info":{"one":"x", "two":"y", "three":"z"}}]')
 
-        self.nested_nest = '{"id":101, "info": [{"id":22, "info":{"one":"a", "two":"b", "three":"c"}},{"id":23, "info":{"one":"x", "two":"y", "three":"z"}}]}'
+        self.nested_nest = ('{"id":101, "info": [{"id":22, "info":{"one":"a", "two":"b", "three":"c"}},'
+                            '{"id":23, "info":{"one":"x", "two":"y", "three":"z"}}]}')
 
     def test_authentication_response(self):
-        json_string = '{"token": "ceac67d033b98fbc5edd483a0e609193","expires": 1209600,"user": {"id": 4,"email": "staff@example.com","username": "staff"}}'
+        json_string = ('{"token": "ceac67d033b98fbc5edd483a0e609193","expires": 1209600,'
+                       '"user": {"id": 4,"email": "staff@example.com","username": "staff"}}')
         output = JP.from_json(json_string, AuthenticationResponse)
 
         self.assertTrue(isinstance(output, AuthenticationResponse))
@@ -160,7 +166,8 @@ class JsonObjectTest(TestCase):
         If valid fields are provided, only required and valid fields should be accessible
         No exception if json contains additional fields, but these are dropped from results
         '''
-        json_string = '[{"name":"Martyn", "age":21, "gender":"male"}, {"name":"Matt", "age":19, "sport":"mountaineering"}]'
+        json_string = ('[{"name":"Martyn", "age":21, "gender":"male"},'
+                       '{"name":"Matt", "age":19, "sport":"mountaineering"}]')
 
         output = JP.from_json(json_string, JsonObjectTestValidFieldsClass)
 
@@ -253,9 +260,13 @@ class JsonObjectTest(TestCase):
             isinstance(output.info[0].info, JsonObjectTestNestedClass))
 
     def test_groups(self):
-        output = JP.from_json('[{"name": "super_admin","id":1234,"uri": "/api/users/14/groups/1234"},{"name": "sub_admin","id":1357,"uri": "/api/users/14/groups/1357"},{"name": "company_admin","id":5678,"uri": "/api/users/14/groups/5678"},{"name": "arbitrary_group","id":2468,"uri": "/api/users/14/groups/2468"}]')
+        output = JP.from_json(
+            ('[{"name": "super_admin","id":1234,"uri": "/api/users/14/groups/1234"},'
+             '{"name": "sub_admin","id":1357,"uri": "/api/users/14/groups/1357"},'
+             '{"name": "company_admin","id":5678,"uri": "/api/users/14/groups/5678"},'
+             '{"name": "arbitrary_group","id":2468,"uri": "/api/users/14/groups/2468"}]'))
 
-        self.assertTrue(len(output)==4)
+        self.assertTrue(len(output) == 4)
         self.assertTrue(output[0].name == "super_admin")
 
     def test_untouched_class(self):
@@ -277,37 +288,66 @@ class JsonObjectTest(TestCase):
 
 
 class OneLevelCategorised(CategorisedJsonObject):
+
     def has_correct_category(self):
         return self.category == "one"
 
+
 class TwoLevelCategorised(CategorisedJsonObject):
+
     def has_correct_category(self):
         return self.category == "two"
 
+
 class ThreeLevelCategorised(CategorisedJsonObject):
+
     def has_correct_category(self):
         return self.category == "three"
 
+
 class FourLevelCategorised(CategorisedJsonObject):
+
     def has_correct_category(self):
         return self.category == "four"
+
 
 class CategorisedJsonParserTest(TestCase):
 
     CJP = CategorisedJsonParser({
-            "chapter": Chapter,
-            "course": Course,
-        })
+        "chapter": Chapter,
+        "course": Course,
+    })
 
     TJP = CategorisedJsonParser({
-            "one": OneLevelCategorised,
-            "two": TwoLevelCategorised,
-            "three": ThreeLevelCategorised,
-            "four": FourLevelCategorised,
-        })
+        "one": OneLevelCategorised,
+        "two": TwoLevelCategorised,
+        "three": ThreeLevelCategorised,
+        "four": FourLevelCategorised,
+    })
 
     def test_categorised_json_parser(self):
-        output = self.CJP.from_json('{"category": "course", "name": "edX Demonstration Course", "content": [{"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/d8a6192ade314473a78242dfeedfbf5b", "id": "i4x://edX/Open_DemoX/chapter/d8a6192ade314473a78242dfeedfbf5b", "name": "Introduction"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/interactive_demonstrations", "id": "i4x://edX/Open_DemoX/chapter/interactive_demonstrations", "name": "Example Week 1: Getting Started"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/graded_interactions", "id": "i4x://edX/Open_DemoX/chapter/graded_interactions", "name": "Example Week 2: Get Interactive"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/social_integration", "id": "i4x://edX/Open_DemoX/chapter/social_integration", "name": "Example Week 3: Be Social"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/1414ffd5143b4b508f739b563ab468b7", "id": "i4x://edX/Open_DemoX/chapter/1414ffd5143b4b508f739b563ab468b7", "name": "About Exams and Certificates"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/9fca584977d04885bc911ea76a9ef29e", "id": "i4x://edX/Open_DemoX/chapter/9fca584977d04885bc911ea76a9ef29e", "name": "holding section"}], "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course", "number": "Open_DemoX", "org": "edX", "id": "edX/Open_DemoX/edx_demo_course"}')
+        output = self.CJP.from_json(
+            ('{"category": "course", "name": "edX Demonstration Course", "content": '
+             '[{"category": "chapter", ''"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/'
+             'content/i4x://edX/Open_DemoX/chapter/d8a6192ade314473a78242dfeedfbf5b",'
+             '"id": "i4x://edX/Open_DemoX/chapter/d8a6192ade314473a78242dfeedfbf5b", "name": "Introduction"},'
+             '{"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/'
+             'i4x://edX/Open_DemoX/chapter/interactive_demonstrations",'
+             '"id": "i4x://edX/Open_DemoX/chapter/interactive_demonstrations","name":"Example 1: Getting Started"},'
+             '{"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/'
+             'i4x://edX/Open_DemoX/chapter/graded_interactions",'
+             '"id": "i4x://edX/Open_DemoX/chapter/graded_interactions", "name": "Example Week 2: Get Interactive"},'
+             '{"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/'
+             'i4x://edX/Open_DemoX/chapter/social_integration", "id":"i4x://edX/Open_DemoX/chapter/social_integration",'
+             '"name": "Example Week 3: Be Social"}, {"category": "chapter", "uri": "http://localhost:8000/api/courses/'
+             'edX/Open_DemoX/edx_demo_course/content/i4x://edX/Open_DemoX/chapter/1414ffd5143b4b508f739b563ab468b7",'
+             '"id": "i4x://edX/Open_DemoX/chapter/1414ffd5143b4b508f739b563ab468b7", "name": "About Certificates"},'
+             '{"category": "chapter", "uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/content/'
+             'i4x://edX/Open_DemoX/chapter/9fca584977d04885bc911ea76a9ef29e",'
+             '"id": "i4x://edX/Open_DemoX/chapter/9fca584977d04885bc911ea76a9ef29e", "name": "holding section"}],'
+             '"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course", "number": "Open_DemoX",'
+             '"org": "edX", "id": "edX/Open_DemoX/edx_demo_course"}')
+            )
 
         self.assertTrue(isinstance(output, Course))
         self.assertTrue(isinstance(output.content[0], Chapter))
@@ -375,25 +415,25 @@ class CategorisedJsonParserTest(TestCase):
 
         self.assertTrue(isinstance(output, OneLevelCategorised))
         self.assertTrue(output.has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[0], TwoLevelCategorised))
         self.assertTrue(output.children[0].has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[0].child, ThreeLevelCategorised))
         self.assertTrue(output.children[0].child.has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[0].child.children[0], FourLevelCategorised))
         self.assertTrue(output.children[0].child.children[0].has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[1], ThreeLevelCategorised))
         self.assertTrue(output.children[1].has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[1].children[0], FourLevelCategorised))
         self.assertTrue(output.children[1].children[0].has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[1].children[1], FourLevelCategorised))
         self.assertTrue(output.children[1].children[1].has_correct_category())
-        
+
         self.assertTrue(isinstance(output.children[2], FourLevelCategorised))
         self.assertTrue(output.children[2].has_correct_category())
 
@@ -403,10 +443,18 @@ class TestGroupInfo(GroupInfo):
     group_type = "test_group"
     date_fields = ["birth_date", "start_date", "end_date"]
 
+
 class TestGroupInfoTest(TestCase):
 
     def test_group_info(self):
-        test_info = TestGroupInfo.create("a_test_group", {"display_name": "A Test Group", "birth_date_year": 1968, "birth_date_month": 1, "birth_date_day": 31})
+        test_info = TestGroupInfo.create(
+            "a_test_group", {
+                "display_name": "A Test Group",
+                "birth_date_year": 1968,
+                "birth_date_month": 1,
+                "birth_date_day": 31
+            }
+        )
 
         # API only returns simple group info, not including data, so we fetch
         stored_test_info = TestGroupInfo.fetch(test_info.id)
@@ -416,18 +464,27 @@ class TestGroupInfoTest(TestCase):
         self.assertEqual(stored_test_info.birth_date, datetime(1968, 1, 31))
 
     def full_info_response(self):
-        test_json = '{"name": "Maggie","uri": "http://localhost:56480/api/groups/39","resources": [{"uri": "http://localhost:56480/api/groups/39/users"}, {"uri": "http://localhost:56480/api/groups/39/groups"}],"data": {"display_name": "Maggie","start_date": "2014-1-1T00:00:00.00000Z","end_date": "2014-12-3T00:00:00.00000Z"},"id": 39,"group_type": "series"}'
+        test_json = ('{"name": "Maggie","uri": "http://localhost:56480/api/groups/39",'
+                     '"resources": [{"uri": "http://localhost:56480/api/groups/39/users"},'
+                     '{"uri": "http://localhost:56480/api/groups/39/groups"}],'
+                     '"data": {"display_name": "Maggie","start_date": "2014-1-1T00:00:00.00000Z",'
+                     '"end_date": "2014-12-3T00:00:00.00000Z"},"id": 39,"group_type": "series"}')
 
         test_info = TestGroupInfo(test_json)
 
         self.assertEqual(test_info.name, "Maggie")
         self.assertEqual(test_info.display_name, "Maggie")
-        self.assertEqual(test_info.start_date, datetime(2014,1,1))
-        self.assertEqual(test_info.end_date, datetime(2014,12,3))
+        self.assertEqual(test_info.start_date, datetime(2014, 1, 1))
+        self.assertEqual(test_info.end_date, datetime(2014, 12, 3))
+
 
 class HelpMeTest(TestCase):
 
     def test_me(self):
-        test_json = '{"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/users", "enrollments": [{"id": 1, "email": "honor@example.com", "username": "honor"}, {"id": 2, "email": "audit@example.com", "username": "audit"}, {"id": 3, "email": "verified@example.com", "username": "verified"}, {"id": 4, "email": "staff@example.com", "username": "staff"}, {"id": 5, "email": "dino@extensionengine.com", "username": "215130"}]}'
-        test_json = '{"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/users", "enrollments": [{"id": 1, "email": "honor@example.com", "username": "honor"}, {"id": 2, "email": "audit@example.com", "username": "audit"}, {"id": 3, "email": "verified@example.com", "username": "verified"}, {"id": 4, "email": "staff@example.com", "username": "staff"}, {"id": 5, "email": "dino@extensionengine.com", "username": "215130"}]}'
+        test_json = ('{"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/users",'
+                     '"enrollments": [{"id": 1, "email": "honor@example.com", "username": "honor"},'
+                     '{"id": 2, "email": "audit@example.com", "username": "audit"},'
+                     '{"id": 3, "email": "verified@example.com", "username": "verified"},'
+                     '{"id": 4, "email": "staff@example.com", "username": "staff"},'
+                     '{"id": 5, "email": "dino@extensionengine.com", "username": "215130"}]}')
         output = JP.from_json(test_json)

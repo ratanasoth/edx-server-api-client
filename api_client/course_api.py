@@ -32,6 +32,7 @@ OBJECT_CATEGORY_MAP = {
 
 CJP = CategorisedJsonParser(OBJECT_CATEGORY_MAP)
 
+
 @api_error_protect
 def get_course_list():
     '''
@@ -39,12 +40,13 @@ def get_course_list():
     '''
     qs_params = {"page_size": 0}
     response = GET('{}/{}?{}'.format(
-            settings.API_SERVER_ADDRESS,
-            COURSEWARE_API,
-            urlencode(qs_params)
-        )
+        settings.API_SERVER_ADDRESS,
+        COURSEWARE_API,
+        urlencode(qs_params)
+    )
     )
     return CJP.from_json(response.read())
+
 
 @api_error_protect
 def get_course_overview(course_id):
@@ -78,6 +80,7 @@ def get_course_overview(course_id):
 
     return overview
 
+
 @api_error_protect
 def get_course_tabs(course_id):
     '''
@@ -93,6 +96,7 @@ def get_course_tabs(course_id):
 
     return {tab.name.lower(): tab for tab in tab_array}
 
+
 @api_error_protect
 def get_course_news(course_id):
     '''
@@ -104,6 +108,7 @@ def get_course_news(course_id):
         course_id)
     )
     return JP.from_json(response.read()).postings
+
 
 @api_error_protect
 def get_course(course_id, depth=3):
@@ -122,13 +127,16 @@ def get_course(course_id, depth=3):
     course.chapters = [content_module for content_module in course.content if content_module.category == "chapter"]
 
     for chapter in course.chapters:
-        chapter.sequentials = [content_child for content_child in chapter.children if content_child.category == "sequential"]
+        chapter.sequentials = [
+            content_child for content_child in chapter.children if content_child.category == "sequential"]
         chapter.is_released = True
 
         for sequential in chapter.sequentials:
-            sequential.pages = [content_child for content_child in sequential.children if content_child.category == "vertical"]
+            sequential.pages = [
+                content_child for content_child in sequential.children if content_child.category == "vertical"]
 
     return course
+
 
 @api_error_protect
 def get_courses(**kwargs):
@@ -151,6 +159,7 @@ def get_courses(**kwargs):
 
     return CJP.from_json(response.read())
 
+
 @api_error_protect
 def get_course_content(course_id, content_id):
     ''' returns course content'''
@@ -164,6 +173,7 @@ def get_course_content(course_id, content_id):
     )
 
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def get_course_groups(course_id, group_type=None, group_object=GroupInfo, *args, **kwargs):
@@ -186,8 +196,9 @@ def get_course_groups(course_id, group_type=None, group_object=GroupInfo, *args,
     response = GET(url)
     return JP.from_json(response.read(), group_object)
 
+
 @api_error_protect
-def get_user_list_json(course_id, program_id = None):
+def get_user_list_json(course_id, program_id=None):
     '''
     Retrieves course user list structure information from the API for specified course
     '''
@@ -196,19 +207,21 @@ def get_user_list_json(course_id, program_id = None):
         qs_params['project'] = program_id
 
     response = GET('{}/{}/{}/users?{}'.format(
-            settings.API_SERVER_ADDRESS,
-            COURSEWARE_API,
-            course_id,
-            urlencode(qs_params),
-        )
+        settings.API_SERVER_ADDRESS,
+        COURSEWARE_API,
+        course_id,
+        urlencode(qs_params),
+    )
     )
 
     return response.read()
 
+
 @api_error_protect
-def get_user_list(course_id, program_id = None):
+def get_user_list(course_id, program_id=None):
 
     return JP.from_json(get_user_list_json(course_id, program_id), course_models.CourseEnrollmentList).enrollments
+
 
 @api_error_protect
 def get_users_list_in_organizations(course_id, organizations):
@@ -217,11 +230,11 @@ def get_users_list_in_organizations(course_id, organizations):
     '''
     qs_params = {"organizations": organizations}
     response = GET('{}/{}/{}/users?{}'.format(
-            settings.API_SERVER_ADDRESS,
-            COURSEWARE_API,
-            course_id,
-            urlencode(qs_params),
-        )
+        settings.API_SERVER_ADDRESS,
+        COURSEWARE_API,
+        course_id,
+        urlencode(qs_params),
+    )
     )
 
     return JP.from_json(response.read(), course_models.CourseEnrollmentList).enrollments
@@ -249,6 +262,7 @@ def add_group_to_course_content(group_id, course_id, content_id):
 
     return JP.from_json(response.read())
 
+
 @api_error_protect
 def get_users_content_filtered(course_id, content_id, *args, **kwargs):
     ''' filter and get course content'''
@@ -267,6 +281,7 @@ def get_users_content_filtered(course_id, content_id, *args, **kwargs):
 
     return JP.from_json(response.read())
 
+
 @api_error_protect
 def get_users_filtered_by_group(course_id, group_ids):
     ''' filter and get course users'''
@@ -283,6 +298,7 @@ def get_users_filtered_by_group(course_id, group_ids):
 
     return JP.from_json(response.read()).enrollments
 
+
 @api_error_protect
 def get_users_filtered_by_role(course_id):
     ''' filter and get course users'''
@@ -297,6 +313,7 @@ def get_users_filtered_by_role(course_id):
 
     return JP.from_json(response.read())
 
+
 @api_error_protect
 def get_course_content_groups(course_id, content_id):
     ''' fetch associates groups to specific content within specific course '''
@@ -310,6 +327,7 @@ def get_course_content_groups(course_id, content_id):
     )
 
     return JP.from_json(response.read(), course_models.CourseContentGroup)
+
 
 @api_error_protect
 def get_course_completions(course_id, user_id=None):
@@ -327,6 +345,7 @@ def get_course_completions(course_id, user_id=None):
     response = GET(url)
 
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def get_course_metrics(course_id, *args, **kwargs):
@@ -349,6 +368,7 @@ def get_course_metrics(course_id, *args, **kwargs):
 
     response = GET(url)
     return JP.from_json(response.read(), course_models.CourseMetrics)
+
 
 @api_error_protect
 def get_course_metrics_by_city(course_id, cities=None):
@@ -385,6 +405,7 @@ def get_course_metrics_grades(course_id, grade_object_type=JsonObject, **kwargs)
 
     return JP.from_json(response.read(), grade_object_type)
 
+
 @api_error_protect
 def get_course_metrics_completions(course_id, completions_object_type=JsonObject, **kwargs):
     ''' retrieves users who are leading in terms of  course module completions '''
@@ -401,6 +422,7 @@ def get_course_metrics_completions(course_id, completions_object_type=JsonObject
     response = GET(url)
 
     return JP.from_json(response.read(), completions_object_type)
+
 
 @api_error_protect
 def get_course_social_metrics(course_id, organization_id=None):
@@ -422,7 +444,14 @@ def get_course_social_metrics(course_id, organization_id=None):
 
 
 @api_error_protect
-def get_course_time_series_metrics(course_id, start_date, end_date, time_series_object=course_models.CourseTimeSeriesMetrics, *args, **kwargs):
+def get_course_time_series_metrics(
+    course_id,
+    start_date,
+    end_date,
+    time_series_object=course_models.CourseTimeSeriesMetrics,
+    *args,
+    **kwargs
+):
     ''' a list of Metrics for the specified Course in time series format '''
     qs_params = {
         'start_date': start_date,
@@ -456,8 +485,9 @@ def get_course_projects(course_id, page_size=0, project_object=JsonObject):
 
     return JP.from_json(response.read(), project_object)
 
+
 @api_error_protect
-def get_module_details(module_uri, include_fields = [], module_object = None):
+def get_module_details(module_uri, include_fields=[], module_object=None):
     ''' Fetches the details of the object at the specific uri with the named custom fields'''
 
     qs_params = {"include_fields": ",".join(include_fields)} if len(include_fields) > 0 else None
@@ -472,8 +502,9 @@ def get_module_details(module_uri, include_fields = [], module_object = None):
 
     return CJP.from_json(response.read())
 
+
 @api_error_protect
-def get_course_content_detail(course_id, content_id, include_fields = [], module_object = None):
+def get_course_content_detail(course_id, content_id, include_fields=[], module_object=None):
     ''' Fetches the details of the object at the specific uri with the named custom fields'''
 
     url = '{}/{}/{}/content/{}'.format(

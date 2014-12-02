@@ -25,10 +25,13 @@ USER_ROLES = DottableDict(
     TA='assistant',
 )
 
-VALID_USER_KEYS = ["email", "first_name", "last_name", "full_name", "city", "country", "username", "level_of_education", "password", "gender", "title", "is_active", "avatar_url"]
+VALID_USER_KEYS = ["email", "first_name", "last_name", "full_name", "city", "country",
+                   "username", "level_of_education", "password", "gender", "title", "is_active", "avatar_url"]
+
 
 def _clean_user_keys(user_hash):
     return {user_key: user_hash[user_key] for user_key in VALID_USER_KEYS if user_key in user_hash}
+
 
 @api_error_protect
 def authenticate(username, password):
@@ -43,6 +46,7 @@ def authenticate(username, password):
     )
     return JP.from_json(response.read(), user_models.AuthenticationResponse)
 
+
 @api_error_protect
 def get_user(user_id):
     ''' get specified user '''
@@ -55,6 +59,7 @@ def get_user(user_id):
     )
     return JP.from_json(response.read(), user_models.UserResponse)
 
+
 @api_error_protect
 def get_user_dict(user_id):
     ''' get specified user as a dict'''
@@ -66,6 +71,7 @@ def get_user_dict(user_id):
         )
     )
     return json.loads(response.read())
+
 
 @api_error_protect
 def get_users(fields=[], *args, **kwargs):
@@ -92,6 +98,7 @@ def get_users(fields=[], *args, **kwargs):
     )
     return JP.from_json(response.read(), user_models.UserResponse)
 
+
 @api_error_protect
 def delete_session(session_key):
     ''' delete associated openedx session '''
@@ -103,6 +110,7 @@ def delete_session(session_key):
         )
     )
 
+
 @api_error_protect
 def register_user(user_hash):
     ''' register the given user within the openedx server '''
@@ -111,6 +119,7 @@ def register_user(user_hash):
         _clean_user_keys(user_hash)
     )
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def _update_user(user_id, user_hash):
@@ -121,15 +130,18 @@ def _update_user(user_id, user_hash):
     )
     return JP.from_json(response.read())
 
+
 @api_error_protect
 def update_user_information(user_id, user_hash):
     ''' update the given user's information within the openedx server '''
     return _update_user(user_id, _clean_user_keys(user_hash))
 
+
 @api_error_protect
 def activate_user(user_id):
     ''' activate the given user on the openedx server '''
     return _update_user(user_id, {"is_active": True})
+
 
 @api_error_protect
 def get_user_courses(user_id):
@@ -145,6 +157,7 @@ def get_user_courses(user_id):
 
     return courses
 
+
 @api_error_protect
 def get_user_roles(user_id):
     ''' get a list of user roles '''
@@ -156,6 +169,7 @@ def get_user_roles(user_id):
         )
     )
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def add_user_role(user_id, course_id, role):
@@ -174,6 +188,7 @@ def add_user_role(user_id, course_id, role):
     )
     return JP.from_json(response.read())
 
+
 @api_error_protect
 def update_user_roles(user_id, role_list):
     ''' update roles, where role_list is a list of dictionaries containing course_id & role '''
@@ -186,6 +201,7 @@ def update_user_roles(user_id, role_list):
         role_list
     )
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def delete_user_role(user_id, course_id, role):
@@ -226,6 +242,7 @@ def get_user_groups(user_id, group_type=None, group_object=GroupInfo, *args, **k
 
     return JP.from_dictionary(groups_json["groups"], group_object)
 
+
 @api_error_protect
 def enroll_user_in_course(user_id, course_id):
     ''' enrolls the user summary in the given course '''
@@ -241,6 +258,7 @@ def enroll_user_in_course(user_id, course_id):
 
     courses = JP.from_json(response.read(), course_models.Course)
 
+
 @api_error_protect
 def unenroll_user_from_course(user_id, course_id):
     ''' unenroll a User from a Course (inactivates the enrollment) '''
@@ -253,6 +271,7 @@ def unenroll_user_from_course(user_id, course_id):
         )
     )
     return (response.code == 204)
+
 
 @api_error_protect
 def get_user_course_detail(user_id, course_id):
@@ -268,6 +287,7 @@ def get_user_course_detail(user_id, course_id):
 
     return JP.from_json(response.read(), user_models.UserCourseStatus)
 
+
 @api_error_protect
 def get_user_gradebook(user_id, course_id, gradebook_model=gradebook_models.Gradebook):
     ''' get grades for the user for this course'''
@@ -282,6 +302,7 @@ def get_user_gradebook(user_id, course_id, gradebook_model=gradebook_models.Grad
 
     return JP.from_json(response.read(), gradebook_model)
 
+
 @api_error_protect
 def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
     '''
@@ -291,21 +312,21 @@ def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
     '''
 
     data = {"positions":
-        [
-            {
-                "parent_content_id": course_id,
-                "child_content_id": chapter_id,
-            },
-            {
-                "parent_content_id": chapter_id,
-                "child_content_id": sequential_id,
-            },
-            {
-                "parent_content_id": sequential_id,
-                "child_content_id": page_id,
-            },
-        ]
-    }
+            [
+                {
+                    "parent_content_id": course_id,
+                    "child_content_id": chapter_id,
+                },
+                {
+                    "parent_content_id": chapter_id,
+                    "child_content_id": sequential_id,
+                },
+                {
+                    "parent_content_id": sequential_id,
+                    "child_content_id": page_id,
+                },
+            ]
+            }
 
     response = POST(
         '{}/{}/{}/courses/{}'.format(
@@ -318,6 +339,7 @@ def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
     )
 
     return JP.from_json(response.read())
+
 
 @api_error_protect
 def is_user_in_group(user_id, group_id):
@@ -339,6 +361,7 @@ def is_user_in_group(user_id, group_id):
 
     return (response.code == 200)
 
+
 @api_error_protect
 def set_user_preferences(user_id, preference_dictionary):
     ''' sets users preferences information '''
@@ -352,6 +375,7 @@ def set_user_preferences(user_id, preference_dictionary):
     )
 
     return True
+
 
 @api_error_protect
 def delete_user_preference(user_id, preference_key):
@@ -367,6 +391,7 @@ def delete_user_preference(user_id, preference_key):
 
     return True
 
+
 @api_error_protect
 def get_user_preferences(user_id):
     ''' sets users preferences information '''
@@ -381,6 +406,7 @@ def get_user_preferences(user_id):
     # Note that we return plain dictionary here - makes more sense 'cos we set a dictionary
     return json.loads(response.read())
 
+
 @api_error_protect
 def get_user_organizations(user_id, organization_object=organization_models.Organization):
     ''' return organizations with which the user is associated '''
@@ -393,6 +419,7 @@ def get_user_organizations(user_id, organization_object=organization_models.Orga
     )
 
     return JP.from_json(response.read(), organization_object)
+
 
 @api_error_protect
 def get_user_workgroups(user_id, course_id=None, workgroup_object=workgroup_models.Workgroup):
@@ -411,6 +438,7 @@ def get_user_workgroups(user_id, course_id=None, workgroup_object=workgroup_mode
     response = GET(url)
     return JP.from_json(response.read(), workgroup_object)
 
+
 @api_error_protect
 def get_users_city_metrics():
     ''' return users by sity metrics'''
@@ -423,6 +451,7 @@ def get_users_city_metrics():
     )
 
     return JP.from_json(response.read(), user_models.CityList)
+
 
 @api_error_protect
 def get_course_social_metrics(user_id, course_id):

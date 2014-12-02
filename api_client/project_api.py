@@ -14,6 +14,7 @@ from . import workgroup_models
 
 PROJECT_API = getattr(settings, 'PROJECT_API', 'api/server/projects')
 
+
 @api_error_protect
 def get_project(project_id, project_object=JsonObject):
     ''' fetch project by id '''
@@ -28,12 +29,14 @@ def get_project(project_id, project_object=JsonObject):
     project = JP.from_json(response.read(), project_object)
     return project
 
+
 @api_error_protect
 def fetch_project_from_url(url, project_object=JsonObject):
     ''' fetch organization by id '''
     response = GET(url)
     project = JP.from_json(response.read(), project_object)
     return project
+
 
 @api_error_protect
 def delete_project(project_id):
@@ -48,6 +51,7 @@ def delete_project(project_id):
 
     return (response.code == 204)
 
+
 @api_error_protect
 def create_project(course_id, content_id, organization_id=None, project_object=JsonObject):
     ''' create a new project '''
@@ -56,7 +60,7 @@ def create_project(course_id, content_id, organization_id=None, project_object=J
         "content_id": content_id,
     }
 
-    if not organization_id is None:
+    if organization_id is not None:
         data["organization"] = organization_id
 
     response = POST(
@@ -84,6 +88,7 @@ def update_project(project_id, project_data, project_object=JsonObject):
     )
 
     return JP.from_json(response.read(), project_object)
+
 
 @api_error_protect
 def get_project_workgroups(project_id, workgroup_object=workgroup_models.Workgroup):
