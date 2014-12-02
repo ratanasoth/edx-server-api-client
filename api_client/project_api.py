@@ -1,15 +1,11 @@
 ''' API calls with respect to groups '''
-from django.utils.translation import ugettext as _
 from django.conf import settings
 
-from lib.util import DottableDict
-from .api_error import api_error_protect, ERROR_CODE_MESSAGES
+from .api_error import api_error_protect
 
 from .json_object import JsonParser as JP
 from .json_object import JsonObject
 from .json_requests import GET, POST, DELETE
-from . import user_models
-from . import course_models
 from . import workgroup_models
 
 PROJECT_API = getattr(settings, 'PROJECT_API', 'api/server/projects')

@@ -1,6 +1,4 @@
 ''' Objects for users / authentication built from json responses from API '''
-import json
-from datetime import datetime
 from .json_object import JsonObject
 from . import project_api, course_api
 

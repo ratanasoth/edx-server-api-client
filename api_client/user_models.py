@@ -1,5 +1,4 @@
 ''' Objects for users / authentication built from json responses from API '''
-import hashlib
 import json
 
 from .json_object import JsonObject
@@ -11,7 +10,6 @@ from .json_object import JsonObject
 
 
 class UserResponse(JsonObject):
-
     ''' object representing a user from api json response '''
     required_fields = ["email", "username"]
     date_fields = ["created"]
@@ -46,7 +44,6 @@ class UserResponse(JsonObject):
 
 
 class AuthenticationResponse(JsonObject):
-
     ''' object representing an authenticated session from api json response '''
     required_fields = ['token', 'user']
     object_map = {
@@ -55,7 +52,6 @@ class AuthenticationResponse(JsonObject):
 
 
 class UserCourseStatus(JsonObject):
-
     ''' object representing a user's course status from api json response '''
     required_fields = ["position"]
 

@@ -1,5 +1,7 @@
 ''' Tests for api_client calls '''
 from datetime import datetime
+import collections
+
 from django.test import TestCase
 from .json_object import JsonParser as JP, DataOnly, JsonObject, MissingRequiredFieldError
 from .json_object import CategorisedJsonParser, CategorisedJsonObject
@@ -7,7 +9,7 @@ from .user_models import UserResponse, AuthenticationResponse
 from .course_models import Course, Chapter
 from .group_models import GroupInfo
 
-import collections
+
 
 # disable no-member 'cos the members are getting created from the json
 # and some others that we don't care about for tests
@@ -51,11 +53,8 @@ class JsonObjectTestUntouchedClass(JsonObject):
         'scores': DataOnly
     }
 
-# Create your tests here.
-
 
 class JsonObjectTest(TestCase):
-
     def setUp(self):
         '''
         Setup json strings for objects and arrays
@@ -288,31 +287,26 @@ class JsonObjectTest(TestCase):
 
 
 class OneLevelCategorised(CategorisedJsonObject):
-
     def has_correct_category(self):
         return self.category == "one"
 
 
 class TwoLevelCategorised(CategorisedJsonObject):
-
     def has_correct_category(self):
         return self.category == "two"
 
 
 class ThreeLevelCategorised(CategorisedJsonObject):
-
     def has_correct_category(self):
         return self.category == "three"
 
 
 class FourLevelCategorised(CategorisedJsonObject):
-
     def has_correct_category(self):
         return self.category == "four"
 
 
 class CategorisedJsonParserTest(TestCase):
-
     CJP = CategorisedJsonParser({
         "chapter": Chapter,
         "course": Course,
@@ -347,7 +341,7 @@ class CategorisedJsonParserTest(TestCase):
              '"id": "i4x://edX/Open_DemoX/chapter/9fca584977d04885bc911ea76a9ef29e", "name": "holding section"}],'
              '"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course", "number": "Open_DemoX",'
              '"org": "edX", "id": "edX/Open_DemoX/edx_demo_course"}')
-            )
+        )
 
         self.assertTrue(isinstance(output, Course))
         self.assertTrue(isinstance(output.content[0], Chapter))
@@ -445,7 +439,6 @@ class TestGroupInfo(GroupInfo):
 
 
 class TestGroupInfoTest(TestCase):
-
     def test_group_info(self):
         test_info = TestGroupInfo.create(
             "a_test_group", {
@@ -479,7 +472,6 @@ class TestGroupInfoTest(TestCase):
 
 
 class HelpMeTest(TestCase):
-
     def test_me(self):
         test_json = ('{"uri": "http://localhost:8000/api/courses/edX/Open_DemoX/edx_demo_course/users",'
                      '"enrollments": [{"id": 1, "email": "honor@example.com", "username": "honor"},'

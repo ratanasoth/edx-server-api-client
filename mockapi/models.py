@@ -15,7 +15,6 @@ def _set_dictionary_from_dictionary(dict1, dict2):
 
 
 class MockHttpResponse(object):
-
     _method = 'GET'
     _response_body = None
     _code = 204
@@ -49,7 +48,7 @@ class MockHttpResponse(object):
         # GET /api
         # + Response 200 (application/json)
 
-        #     + Body
+        # + Body
 
         #             {
         #                 "documentation": "http://docs.openedxapi.apiary.io",

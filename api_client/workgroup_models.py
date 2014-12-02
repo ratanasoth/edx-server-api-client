@@ -1,6 +1,4 @@
 ''' Objects for users / authentication built from json responses from API '''
-import json
-from datetime import datetime
 from .json_object import JsonObject
 import workgroup_api
 
@@ -9,6 +7,7 @@ class Workgroup(JsonObject):
     # required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
 
     ''' object representing a organization from api json response '''
+
     @classmethod
     def create(cls, name, workgroup_data):
         return workgroup_api.create_workgroup(name, workgroup_data=workgroup_data, group_object=cls)

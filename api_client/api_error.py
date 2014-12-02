@@ -52,7 +52,7 @@ class ApiError(Exception):
                 context_name,
                 self.context[context_name]
             )
-                for context_name in self.context]
+             for context_name in self.context]
         )
         return "ApiError '{}' ({}) - {}({})".format(
             self.message,
@@ -66,6 +66,7 @@ def api_error_protect(func):
     '''
     Decorator which will raise an ApiError for api calls
     '''
+
     @functools.wraps(func)
     def call_api_method(*args, **kwargs):
         try:
@@ -84,4 +85,5 @@ def api_error_protect(func):
             )
             print "Error calling {}: {}".format(func, api_error)
             raise api_error
+
     return call_api_method

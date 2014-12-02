@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, include, url
-from django.conf import settings
+import re
 
+from django.conf.urls import patterns, url
+from django.conf import settings
 from .api_parser import ApiParser
 from .views import MockResponseView
-import re
 
 
 def transform_chunk(chunk):
@@ -12,6 +12,7 @@ def transform_chunk(chunk):
         chunk = r"(?P<{}>.*)".format(chunk[1:-1])
 
     return chunk
+
 
 urlpatterns = patterns(
     '',
@@ -44,8 +45,7 @@ for mock_response in mock_responses:
     if mock_response._address[-1] == '}' and mock_response._method == "POST":
         add_to_pattern_list(new_url[0:-1], mock_response)
 
-
 mock_urls = [key for key in pattern_list]
 mock_urls = sorted(mock_urls, key=lambda x: len(x), reverse=True)
 for mock_url in mock_urls:
-    urlpatterns += patterns('', url(mock_url, MockResponseView.as_view(mock_responses=pattern_list[mock_url])),)
+    urlpatterns += patterns('', url(mock_url, MockResponseView.as_view(mock_responses=pattern_list[mock_url])), )

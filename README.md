@@ -1,2 +1,0 @@
-edx-server-api-client
-=====================

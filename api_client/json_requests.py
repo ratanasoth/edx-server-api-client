@@ -1,8 +1,10 @@
 ''' GET, POST, DELETE, PUT requests for json client '''
 import urllib2 as url_access
 import json
+
 from django.conf import settings
-from accounts.middleware.thread_local import get_current_request
+
+
 
 # nice to have capitalised names for familiar GET, POST, DELETE, PUT
 # pylint: disable=invalid-name
@@ -16,17 +18,7 @@ TIMEOUT = 20
 
 
 def json_headers():
-    # TODO: Add this in when API can deal with requests that have session but
-    # not csrf_token
     return JSON_HEADERS
-
-    headers = JSON_HEADERS.copy()
-    request = get_current_request()
-    if request:
-        remote_session_key = request.session.get('remote_session_key')
-        if remote_session_key:
-            headers['Cookie'] += ";sessionid={};".format(remote_session_key)
-    return headers
 
 
 def GET(url_path):

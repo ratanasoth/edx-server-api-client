@@ -1,17 +1,13 @@
 ''' Objects for users / authentication built from json responses from API '''
-import json
-import os
-from datetime import datetime
 from .json_object import JsonObject
 import organization_api
-from django.conf import settings
-from django.core.files.storage import default_storage
 
 
 class Organization(JsonObject):
     # required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
 
     ''' object representing a organization from api json response '''
+
     @classmethod
     def create(cls, name, organization_data):
         return organization_api.create_organization(name, organization_data=organization_data, organization_object=cls)

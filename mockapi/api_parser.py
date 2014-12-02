@@ -2,7 +2,6 @@ from models import MockHttpResponse
 
 
 class ApiParser(object):
-
     _responses = []
 
     def __init__(self, file_path_list):

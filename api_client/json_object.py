@@ -1,13 +1,8 @@
 ''' Base classes to read json responses into objects '''
 import json
 import collections
-import datetime
-import os
-import StringIO
-import string
 
-from django.conf import settings
-from django.core.files.storage import default_storage
+import datetime
 
 
 class DataOnly(object):
@@ -18,7 +13,6 @@ class DataOnly(object):
 # don't need a public method because they inherit from the base implementation
 # pylint: disable=too-few-public-methods
 class Objectifier(object):
-
     '''
     Class to build class-instance accessors from provided dictionary object
     '''
@@ -65,7 +59,6 @@ class Objectifier(object):
 
 
 class MissingRequiredFieldError(Exception):
-
     '''
     Exception to be thrown when a required field is missing
     '''
@@ -103,7 +96,6 @@ def _build_date_field(json_date_string_value):
 # Can create one of these, and add some class-specific checks for required
 # values, even strip bad values
 class JsonObject(Objectifier):
-
     '''
     Create an python object from a json object
     Can inherit from this class if you like, specifying member overrides
@@ -149,11 +141,11 @@ class JsonObject(Objectifier):
 
 
 class JsonParser(object):
-
     '''
     JsonParser static class to initiate parsing of json into specific
     JsonObject impementations
     '''
+
     @staticmethod
     def from_json(json_data, object_type=JsonObject, data_filter=None):
         ''' takes json => dictionary / array and processes it accordingly '''
@@ -177,7 +169,6 @@ class JsonParser(object):
 
 
 class CategorisedJsonObject(JsonObject):
-
     _categorised_parser = None
 
     def __init__(self, json_data=None, dictionary=None, parser=None):
@@ -213,7 +204,6 @@ class CategorisedJsonObject(JsonObject):
 
 
 class CategorisedJsonParser(object):
-
     _category_property_name = "category"
     _category_dictionary = {}
 

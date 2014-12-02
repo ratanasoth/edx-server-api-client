@@ -1,16 +1,12 @@
-from django.test import TestCase
-from django.conf import settings
-
 import json
 
+from django.test import TestCase
+from django.conf import settings
 from .models import MockHttpResponse
 from .api_parser import ApiParser
 
-# Create your tests here.
-
 
 class MockerTester(TestCase):
-
     def test_simple(self):
         response_dictionary = {
             "documentation": "http://docs.openedxapi.apiary.io",
@@ -89,7 +85,7 @@ class MockerTester(TestCase):
         # POST /api/groups
         # + Request (application/json)
 
-        #     + Body
+        # + Body
 
         #             {
         #                 "name": "Alpha Group"

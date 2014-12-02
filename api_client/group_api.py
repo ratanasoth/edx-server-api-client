@@ -1,11 +1,9 @@
 ''' API calls with respect to groups '''
-from django.utils.translation import ugettext as _
-from django.conf import settings
 from urllib import urlencode
 
-from lib.util import DottableDict
+from django.utils.translation import ugettext as _
+from django.conf import settings
 from .api_error import api_error_protect, ERROR_CODE_MESSAGES
-
 from .json_object import JsonParser as JP
 from .json_object import JsonObject
 from .json_requests import GET, POST, DELETE

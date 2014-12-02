@@ -1,18 +1,17 @@
 ''' API calls with respect to users and authentication '''
 from urllib2 import HTTPError
 from urllib import urlencode
-import copy
 import json
-from lib.util import DottableDict
 
+from lib.util import DottableDict
 from django.conf import settings
 from django.utils.translation import ugettext as _
-
 from .json_object import JsonParser as JP
 from . import user_models, gradebook_models, organization_models, workgroup_models, course_models
 from .json_requests import GET, POST, PUT, DELETE
 from .api_error import api_error_protect, ERROR_CODE_MESSAGES
 from .group_models import GroupInfo
+
 
 AUTH_API = getattr(settings, 'AUTH_API', 'api/server/sessions')
 USER_API = getattr(settings, 'USER_API', 'api/server/users')
@@ -312,21 +311,21 @@ def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
     '''
 
     data = {"positions":
-            [
-                {
-                    "parent_content_id": course_id,
-                    "child_content_id": chapter_id,
-                },
-                {
-                    "parent_content_id": chapter_id,
-                    "child_content_id": sequential_id,
-                },
-                {
-                    "parent_content_id": sequential_id,
-                    "child_content_id": page_id,
-                },
-            ]
-            }
+                [
+                    {
+                        "parent_content_id": course_id,
+                        "child_content_id": chapter_id,
+                    },
+                    {
+                        "parent_content_id": chapter_id,
+                        "child_content_id": sequential_id,
+                    },
+                    {
+                        "parent_content_id": sequential_id,
+                        "child_content_id": page_id,
+                    },
+                ]
+    }
 
     response = POST(
         '{}/{}/{}/courses/{}'.format(
@@ -467,6 +466,7 @@ def get_course_social_metrics(user_id, course_id):
     )
 
     return JP.from_json(response.read())
+
 
 USER_ERROR_CODE_MESSAGES = {
     "update_user_information": {

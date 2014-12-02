@@ -1,18 +1,17 @@
 ''' API calls with respect to courses '''
-from django.conf import settings
 from urllib import urlencode
 
+from django.conf import settings
 from api_error import api_error_protect
-
 from .json_object import CategorisedJsonParser
 from .json_object import CategorisedJsonObject
 from .json_object import JsonParser as JP
 from .json_object import JsonObject
 from .json_requests import GET
 from .json_requests import POST
-
 from .group_models import GroupInfo
 from . import course_models
+
 
 COURSEWARE_API = getattr(settings, 'COURSEWARE_API', 'api/server/courses')
 
@@ -124,16 +123,18 @@ def get_course(course_id, depth=3):
 
     # Load the depth from the API
     course = CJP.from_json(response.read())
-    course.chapters = [content_module for content_module in course.content if content_module.category == "chapter"]
 
-    for chapter in course.chapters:
-        chapter.sequentials = [
-            content_child for content_child in chapter.children if content_child.category == "sequential"]
-        chapter.is_released = True
+    if hasattr(course, 'content'):
+        course.chapters = [content_module for content_module in course.content if content_module.category == "chapter"]
 
-        for sequential in chapter.sequentials:
-            sequential.pages = [
-                content_child for content_child in sequential.children if content_child.category == "vertical"]
+        for chapter in course.chapters:
+            chapter.sequentials = [
+                content_child for content_child in chapter.children if content_child.category == "sequential"]
+            chapter.is_released = True
+
+            for sequential in chapter.sequentials:
+                sequential.pages = [
+                    content_child for content_child in sequential.children if content_child.category == "vertical"]
 
     return course
 
@@ -219,7 +220,6 @@ def get_user_list_json(course_id, program_id=None):
 
 @api_error_protect
 def get_user_list(course_id, program_id=None):
-
     return JP.from_json(get_user_list_json(course_id, program_id), course_models.CourseEnrollmentList).enrollments
 
 
@@ -445,12 +445,12 @@ def get_course_social_metrics(course_id, organization_id=None):
 
 @api_error_protect
 def get_course_time_series_metrics(
-    course_id,
-    start_date,
-    end_date,
-    time_series_object=course_models.CourseTimeSeriesMetrics,
-    *args,
-    **kwargs
+        course_id,
+        start_date,
+        end_date,
+        time_series_object=course_models.CourseTimeSeriesMetrics,
+        *args,
+        **kwargs
 ):
     ''' a list of Metrics for the specified Course in time series format '''
     qs_params = {
