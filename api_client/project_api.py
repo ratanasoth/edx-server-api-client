@@ -1,4 +1,4 @@
-''' API calls with respect to groups '''
+""" API calls with respect to groups """
 from django.conf import settings
 
 from .api_error import api_error_protect
@@ -13,7 +13,7 @@ PROJECT_API = getattr(settings, 'PROJECT_API', 'api/server/projects')
 
 @api_error_protect
 def get_project(project_id, project_object=JsonObject):
-    ''' fetch project by id '''
+    """ fetch project by id """
     response = GET(
         '{}/{}/{}/'.format(
             settings.API_SERVER_ADDRESS,
@@ -28,7 +28,7 @@ def get_project(project_id, project_object=JsonObject):
 
 @api_error_protect
 def fetch_project_from_url(url, project_object=JsonObject):
-    ''' fetch organization by id '''
+    """ fetch organization by id """
     response = GET(url)
     project = JP.from_json(response.read(), project_object)
     return project
@@ -36,7 +36,7 @@ def fetch_project_from_url(url, project_object=JsonObject):
 
 @api_error_protect
 def delete_project(project_id):
-    ''' delete project by id '''
+    """ delete project by id """
     response = DELETE(
         '{}/{}/{}/'.format(
             settings.API_SERVER_ADDRESS,
@@ -50,7 +50,7 @@ def delete_project(project_id):
 
 @api_error_protect
 def create_project(course_id, content_id, organization_id=None, project_object=JsonObject):
-    ''' create a new project '''
+    """ create a new project """
     data = {
         "course_id": course_id,
         "content_id": content_id,
@@ -72,7 +72,7 @@ def create_project(course_id, content_id, organization_id=None, project_object=J
 
 @api_error_protect
 def update_project(project_id, project_data, project_object=JsonObject):
-    ''' update existing project '''
+    """ update existing project """
 
     response = PUT(
         '{}/{}/{}'.format(

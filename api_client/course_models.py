@@ -1,4 +1,4 @@
-''' Objects for courses built from json responses from API '''
+""" Objects for courses built from json responses from API """
 import datetime
 
 from django.conf import settings
@@ -60,7 +60,7 @@ class _HasCourseDates(CategorisedJsonObject):
 
 
 class Page(_HasCourseDates):
-    ''' object representing a page / module within a subsection '''
+    """ object representing a page / module within a subsection """
     required_fields = ["id", "name", ]
 
     def vertical_usage_id(self):
@@ -74,17 +74,17 @@ class Page(_HasCourseDates):
 
 
 class Sequential(_HasCourseDates):
-    ''' object representing a subsection within a chapter / lesson '''
+    """ object representing a subsection within a chapter / lesson """
     required_fields = ["id", "name", ]
 
 
 class Chapter(_HasCourseDates):
-    ''' object representing a chapter / lesson within a course '''
+    """ object representing a chapter / lesson within a course """
     required_fields = ["id", "name", ]
 
 
 class Course(CategorisedJsonObject):
-    ''' object representing a course '''
+    """ object representing a course """
     required_fields = ["id", "name", ]
     date_fields = ["start", "end", ]
 
@@ -220,7 +220,7 @@ class CourseList(JsonObject):
 
 
 class CourseEnrollment(JsonObject):
-    ''' object representing students/users enrolled to course '''
+    """ object representing students/users enrolled to course """
     required_fields = ["id", "email", "username", ]
 
 

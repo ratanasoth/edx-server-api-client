@@ -1,4 +1,4 @@
-''' API calls with respect to groups '''
+""" API calls with respect to groups """
 from urllib import urlencode
 
 from django.utils.translation import ugettext as _
@@ -16,7 +16,7 @@ GROUP_API = getattr(settings, 'GROUP_API', 'api/server/groups')
 
 @api_error_protect
 def get_groups_of_type(group_type, group_object=JsonObject, *args, **kwargs):
-    ''' gets all groups of provided type'''
+    """ gets all groups of provided type"""
 
     qs_params = {
         "page_size": 0,
@@ -42,7 +42,7 @@ def get_groups_of_type(group_type, group_object=JsonObject, *args, **kwargs):
 
 @api_error_protect
 def create_group(group_name, group_type, group_data=None, group_object=JsonObject):
-    ''' create a new group '''
+    """ create a new group """
     data = {
         "name": group_name,
         "type": group_type,
@@ -64,7 +64,7 @@ def create_group(group_name, group_type, group_data=None, group_object=JsonObjec
 
 @api_error_protect
 def fetch_group(group_id, group_object=JsonObject):
-    ''' fetch group by id '''
+    """ fetch group by id """
     response = GET(
         '{}/{}/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -78,7 +78,7 @@ def fetch_group(group_id, group_object=JsonObject):
 
 @api_error_protect
 def delete_group(group_id):
-    ''' delete group by id '''
+    """ delete group by id """
     response = DELETE(
         '{}/{}/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -92,7 +92,7 @@ def delete_group(group_id):
 
 @api_error_protect
 def update_group(group_id, group_name, group_type, group_data=None, group_object=JsonObject):
-    ''' update existing group '''
+    """ update existing group """
     data = {
         "type": group_type,
         "name": group_name
@@ -115,7 +115,7 @@ def update_group(group_id, group_name, group_type, group_data=None, group_object
 
 @api_error_protect
 def add_user_to_group(user_id, group_id, group_object=JsonObject):
-    ''' adds user to group '''
+    """ adds user to group """
     data = {"user_id": user_id}
     response = POST(
         '{}/{}/{}/users'.format(
@@ -131,7 +131,7 @@ def add_user_to_group(user_id, group_id, group_object=JsonObject):
 
 @api_error_protect
 def add_course_to_group(course_id, group_id, group_object=JsonObject):
-    ''' adds course to group '''
+    """ adds course to group """
     data = {"course_id": course_id}
     response = POST(
         '{}/{}/{}/courses'.format(
@@ -147,7 +147,7 @@ def add_course_to_group(course_id, group_id, group_object=JsonObject):
 
 @api_error_protect
 def add_group_to_group(child_group_id, group_id, group_object=JsonObject, relationship_type='g'):
-    ''' adds user to group '''
+    """ adds user to group """
     data = {
         "group_id": child_group_id,
         "relationship_type": relationship_type
@@ -166,7 +166,7 @@ def add_group_to_group(child_group_id, group_id, group_object=JsonObject, relati
 
 @api_error_protect
 def get_users_in_group(group_id):
-    ''' get list of users associated with a specific group '''
+    """ get list of users associated with a specific group """
     response = GET(
         '{}/{}/{}/users'.format(
             settings.API_SERVER_ADDRESS,
@@ -182,7 +182,7 @@ def get_users_in_group(group_id):
 
 @api_error_protect
 def remove_user_from_group(user_id, group_id):
-    ''' remove user association with a specific group '''
+    """ remove user association with a specific group """
 
     response = DELETE(
         '{}/{}/{}/users/{}'.format(
@@ -198,7 +198,7 @@ def remove_user_from_group(user_id, group_id):
 
 @api_error_protect
 def remove_course_from_group(course_id, group_id, group_object=JsonObject):
-    ''' removes course from group '''
+    """ removes course from group """
 
     response = DELETE(
         '{}/{}/{}/courses/{}'.format(
@@ -214,7 +214,7 @@ def remove_course_from_group(course_id, group_id, group_object=JsonObject):
 
 @api_error_protect
 def get_courses_in_group(group_id):
-    ''' get list of courses associated with a specific group '''
+    """ get list of courses associated with a specific group """
     response = GET(
         '{}/{}/{}/courses'.format(
             settings.API_SERVER_ADDRESS,
@@ -229,7 +229,7 @@ def get_courses_in_group(group_id):
 
 @api_error_protect
 def get_groups_in_group(group_id, group_object=JsonObject, *args, **kwargs):
-    ''' get list of groups associated with a specific group '''
+    """ get list of groups associated with a specific group """
 
     qs_params = {}
     qs_params.update(kwargs)

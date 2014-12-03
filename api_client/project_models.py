@@ -1,4 +1,4 @@
-''' Objects for users / authentication built from json responses from API '''
+""" Objects for users / authentication built from json responses from API """
 from .json_object import JsonObject
 from . import project_api, course_api
 

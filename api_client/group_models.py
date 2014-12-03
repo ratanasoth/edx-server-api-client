@@ -1,4 +1,4 @@
-''' Objects for users / authentication built from json responses from API '''
+""" Objects for users / authentication built from json responses from API """
 import json
 from datetime import datetime, date
 
@@ -7,7 +7,7 @@ import group_api
 
 
 class GroupInfo(JsonObject):
-    ''' object representing a group from api json response '''
+    """ object representing a group from api json response """
     # required_fields = ["name", "id"]
     data_fields = []
     group_type = None

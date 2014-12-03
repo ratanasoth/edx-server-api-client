@@ -1,4 +1,4 @@
-''' API calls with respect to users and authentication '''
+""" API calls with respect to users and authentication """
 from urllib2 import HTTPError
 from urllib import urlencode
 import json
@@ -34,7 +34,7 @@ def _clean_user_keys(user_hash):
 
 @api_error_protect
 def authenticate(username, password):
-    ''' authenticate to the API server '''
+    """ authenticate to the API server """
     data = {
         "username": username,
         "password": password
@@ -48,7 +48,7 @@ def authenticate(username, password):
 
 @api_error_protect
 def get_user(user_id):
-    ''' get specified user '''
+    """ get specified user """
     # NB - trailing slash causes only a small amount of fields to get output
     # get extended fields as well if not including trailing slash
     response = GET(
@@ -61,7 +61,7 @@ def get_user(user_id):
 
 @api_error_protect
 def get_user_dict(user_id):
-    ''' get specified user as a dict'''
+    """ get specified user as a dict"""
     # NB - trailing slash causes only a small amount of fields to get output
     # get extended fields as well if not including trailing slash
     response = GET(
@@ -74,7 +74,7 @@ def get_user_dict(user_id):
 
 @api_error_protect
 def get_users(fields=[], *args, **kwargs):
-    ''' get all users that meet filter criteria'''
+    """ get all users that meet filter criteria"""
     request_fields = ['id', 'email', 'username']
     request_fields.extend(fields)
     qs_params = {
@@ -100,7 +100,7 @@ def get_users(fields=[], *args, **kwargs):
 
 @api_error_protect
 def delete_session(session_key):
-    ''' delete associated openedx session '''
+    """ delete associated openedx session """
     DELETE(
         '{}/{}/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -112,7 +112,7 @@ def delete_session(session_key):
 
 @api_error_protect
 def register_user(user_hash):
-    ''' register the given user within the openedx server '''
+    """ register the given user within the openedx server """
     response = POST(
         '{}/{}'.format(settings.API_SERVER_ADDRESS, USER_API),
         _clean_user_keys(user_hash)
@@ -122,7 +122,7 @@ def register_user(user_hash):
 
 @api_error_protect
 def _update_user(user_id, user_hash):
-    ''' update the given user's information within the openedx server '''
+    """ update the given user's information within the openedx server """
     response = POST(
         '{}/{}/{}'.format(settings.API_SERVER_ADDRESS, USER_API, user_id),
         user_hash
@@ -132,19 +132,19 @@ def _update_user(user_id, user_hash):
 
 @api_error_protect
 def update_user_information(user_id, user_hash):
-    ''' update the given user's information within the openedx server '''
+    """ update the given user's information within the openedx server """
     return _update_user(user_id, _clean_user_keys(user_hash))
 
 
 @api_error_protect
 def activate_user(user_id):
-    ''' activate the given user on the openedx server '''
+    """ activate the given user on the openedx server """
     return _update_user(user_id, {"is_active": True})
 
 
 @api_error_protect
 def get_user_courses(user_id):
-    ''' get the user's summary for their courses '''
+    """ get the user's summary for their courses """
     response = GET(
         '{}/{}/{}/courses'.format(
             settings.API_SERVER_ADDRESS,
@@ -159,7 +159,7 @@ def get_user_courses(user_id):
 
 @api_error_protect
 def get_user_roles(user_id):
-    ''' get a list of user roles '''
+    """ get a list of user roles """
     response = GET(
         '{}/{}/{}/roles?page_size=0'.format(
             settings.API_SERVER_ADDRESS,
@@ -172,7 +172,7 @@ def get_user_roles(user_id):
 
 @api_error_protect
 def add_user_role(user_id, course_id, role):
-    ''' add role for course, roles are 'instructor' and 'assistant' '''
+    """ add role for course, roles are 'instructor' and 'assistant' """
     data = {
         'course_id': course_id,
         'role': role
@@ -190,7 +190,7 @@ def add_user_role(user_id, course_id, role):
 
 @api_error_protect
 def update_user_roles(user_id, role_list):
-    ''' update roles, where role_list is a list of dictionaries containing course_id & role '''
+    """ update roles, where role_list is a list of dictionaries containing course_id & role """
     response = PUT(
         '{}/{}/{}/roles'.format(
             settings.API_SERVER_ADDRESS,
@@ -219,7 +219,7 @@ def delete_user_role(user_id, course_id, role):
 
 @api_error_protect
 def get_user_groups(user_id, group_type=None, group_object=GroupInfo, *args, **kwargs):
-    ''' get the groups in which this user is a member '''
+    """ get the groups in which this user is a member """
     qs_params = {}
     qs_params.update(kwargs)
 
@@ -244,7 +244,7 @@ def get_user_groups(user_id, group_type=None, group_object=GroupInfo, *args, **k
 
 @api_error_protect
 def enroll_user_in_course(user_id, course_id):
-    ''' enrolls the user summary in the given course '''
+    """ enrolls the user summary in the given course """
     data = {"course_id": course_id}
     response = POST(
         '{}/{}/{}/courses'.format(
@@ -260,7 +260,7 @@ def enroll_user_in_course(user_id, course_id):
 
 @api_error_protect
 def unenroll_user_from_course(user_id, course_id):
-    ''' unenroll a User from a Course (inactivates the enrollment) '''
+    """ unenroll a User from a Course (inactivates the enrollment) """
     response = DELETE(
         '{}/{}/{}/courses/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -274,7 +274,7 @@ def unenroll_user_from_course(user_id, course_id):
 
 @api_error_protect
 def get_user_course_detail(user_id, course_id):
-    ''' get details for the user for this course'''
+    """ get details for the user for this course"""
     response = GET(
         '{}/{}/{}/courses/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -289,7 +289,7 @@ def get_user_course_detail(user_id, course_id):
 
 @api_error_protect
 def get_user_gradebook(user_id, course_id, gradebook_model=gradebook_models.Gradebook):
-    ''' get grades for the user for this course'''
+    """ get grades for the user for this course"""
     response = GET(
         '{}/{}/{}/courses/{}/grades'.format(
             settings.API_SERVER_ADDRESS,
@@ -304,11 +304,11 @@ def get_user_gradebook(user_id, course_id, gradebook_model=gradebook_models.Grad
 
 @api_error_protect
 def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
-    '''
+    """
     Let the openedx server know the most recently visited page
     Can also provide a None value for chapter_id, then it just sets the page
     within the sequential_id
-    '''
+    """
 
     data = {"positions":
                 [
@@ -342,7 +342,7 @@ def set_user_bookmark(user_id, course_id, chapter_id, sequential_id, page_id):
 
 @api_error_protect
 def is_user_in_group(user_id, group_id):
-    ''' checks group membership '''
+    """ checks group membership """
     try:
         response = GET(
             '{}/{}/{}/users/{}'.format(
@@ -363,7 +363,7 @@ def is_user_in_group(user_id, group_id):
 
 @api_error_protect
 def set_user_preferences(user_id, preference_dictionary):
-    ''' sets users preferences information '''
+    """ sets users preferences information """
     response = POST(
         '{}/{}/{}/preferences'.format(
             settings.API_SERVER_ADDRESS,
@@ -378,7 +378,7 @@ def set_user_preferences(user_id, preference_dictionary):
 
 @api_error_protect
 def delete_user_preference(user_id, preference_key):
-    ''' sets users preferences information '''
+    """ sets users preferences information """
     DELETE(
         '{}/{}/{}/preferences/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -393,7 +393,7 @@ def delete_user_preference(user_id, preference_key):
 
 @api_error_protect
 def get_user_preferences(user_id):
-    ''' sets users preferences information '''
+    """ sets users preferences information """
     response = GET(
         '{}/{}/{}/preferences'.format(
             settings.API_SERVER_ADDRESS,
@@ -408,7 +408,7 @@ def get_user_preferences(user_id):
 
 @api_error_protect
 def get_user_organizations(user_id, organization_object=organization_models.Organization):
-    ''' return organizations with which the user is associated '''
+    """ return organizations with which the user is associated """
     response = GET(
         '{}/{}/{}/organizations/?page_size=0'.format(
             settings.API_SERVER_ADDRESS,
@@ -422,7 +422,7 @@ def get_user_organizations(user_id, organization_object=organization_models.Orga
 
 @api_error_protect
 def get_user_workgroups(user_id, course_id=None, workgroup_object=workgroup_models.Workgroup):
-    ''' return organizations with which the user is associated '''
+    """ return organizations with which the user is associated """
     qs_params = {"page_size": 0}
     if course_id:
         qs_params["course_id"] = course_id
@@ -440,7 +440,7 @@ def get_user_workgroups(user_id, course_id=None, workgroup_object=workgroup_mode
 
 @api_error_protect
 def get_users_city_metrics():
-    ''' return users by sity metrics'''
+    """ return users by city metrics"""
 
     response = GET(
         '{}/{}/metrics/cities/?page_size=0'.format(
@@ -454,7 +454,7 @@ def get_users_city_metrics():
 
 @api_error_protect
 def get_course_social_metrics(user_id, course_id):
-    ''' fetch social metrics for course '''
+    """ fetch social metrics for course """
 
     response = GET(
         '{}/{}/{}/courses/{}/metrics/social/'.format(

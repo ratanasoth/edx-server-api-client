@@ -1,4 +1,4 @@
-''' API calls with respect to courses '''
+""" API calls with respect to courses """
 from urllib import urlencode
 
 from django.conf import settings
@@ -34,9 +34,9 @@ CJP = CategorisedJsonParser(OBJECT_CATEGORY_MAP)
 
 @api_error_protect
 def get_course_list():
-    '''
+    """
     Retrieves list of courses from openedx server
-    '''
+    """
     qs_params = {"page_size": 0}
     response = GET('{}/{}?{}'.format(
         settings.API_SERVER_ADDRESS,
@@ -49,9 +49,9 @@ def get_course_list():
 
 @api_error_protect
 def get_course_overview(course_id):
-    '''
+    """
     Retrieves course overview information from the API for specified course
-    '''
+    """
     response = GET('{}/{}/{}/overview?parse=true'.format(
         settings.API_SERVER_ADDRESS,
         COURSEWARE_API,
@@ -82,9 +82,9 @@ def get_course_overview(course_id):
 
 @api_error_protect
 def get_course_tabs(course_id):
-    '''
+    """
     Returns map of tab content key'd on "name" attribute
-    '''
+    """
     response = GET('{}/{}/{}/static_tabs?detail=true'.format(
         settings.API_SERVER_ADDRESS,
         COURSEWARE_API,
@@ -98,9 +98,9 @@ def get_course_tabs(course_id):
 
 @api_error_protect
 def get_course_news(course_id):
-    '''
+    """
     Retrieves course updates from the API for specified course
-    '''
+    """
     response = GET('{}/{}/{}/updates?parse=true'.format(
         settings.API_SERVER_ADDRESS,
         COURSEWARE_API,
@@ -111,9 +111,9 @@ def get_course_news(course_id):
 
 @api_error_protect
 def get_course(course_id, depth=3):
-    '''
+    """
     Retrieves course structure information from the API for specified course
-    '''
+    """
     response = GET('{}/{}/{}?depth={}'.format(
         settings.API_SERVER_ADDRESS,
         COURSEWARE_API,
@@ -141,9 +141,9 @@ def get_course(course_id, depth=3):
 
 @api_error_protect
 def get_courses(**kwargs):
-    '''
+    """
     Retrieves course structure information from the API for specified courses
-    '''
+    """
     qs_params = {"page_size": 0}
 
     for karg in kwargs:
@@ -163,7 +163,7 @@ def get_courses(**kwargs):
 
 @api_error_protect
 def get_course_content(course_id, content_id):
-    ''' returns course content'''
+    """ returns course content"""
     response = GET(
         '{}/{}/{}/content/{}'.format(
             settings.API_SERVER_ADDRESS,
@@ -178,7 +178,7 @@ def get_course_content(course_id, content_id):
 
 @api_error_protect
 def get_course_groups(course_id, group_type=None, group_object=GroupInfo, *args, **kwargs):
-    ''' get groups associated with this course '''
+    """ get groups associated with this course """
     qs_params = {}
     qs_params.update(kwargs)
 
@@ -200,9 +200,9 @@ def get_course_groups(course_id, group_type=None, group_object=GroupInfo, *args,
 
 @api_error_protect
 def get_user_list_json(course_id, program_id=None):
-    '''
+    """
     Retrieves course user list structure information from the API for specified course
-    '''
+    """
     qs_params = {}
     if program_id:
         qs_params['project'] = program_id
@@ -225,9 +225,9 @@ def get_user_list(course_id, program_id=None):
 
 @api_error_protect
 def get_users_list_in_organizations(course_id, organizations):
-    '''
+    """
     Retrieves course user list structure information from the API for specified course
-    '''
+    """
     qs_params = {"organizations": organizations}
     response = GET('{}/{}/{}/users?{}'.format(
         settings.API_SERVER_ADDRESS,
@@ -242,7 +242,7 @@ def get_users_list_in_organizations(course_id, organizations):
 
 @api_error_protect
 def add_group_to_course_content(group_id, course_id, content_id):
-    ''' associate group to specific course '''
+    """ associate group to specific course """
 
     data = {
         'course_id': course_id,
@@ -265,7 +265,7 @@ def add_group_to_course_content(group_id, course_id, content_id):
 
 @api_error_protect
 def get_users_content_filtered(course_id, content_id, *args, **kwargs):
-    ''' filter and get course content'''
+    """ filter and get course content"""
 
     qs_params = {}
     qs_params.update(kwargs)
@@ -284,7 +284,7 @@ def get_users_content_filtered(course_id, content_id, *args, **kwargs):
 
 @api_error_protect
 def get_users_filtered_by_group(course_id, group_ids):
-    ''' filter and get course users'''
+    """ filter and get course users"""
 
     qs_params = {"groups": group_ids}
     response = GET(
@@ -301,7 +301,7 @@ def get_users_filtered_by_group(course_id, group_ids):
 
 @api_error_protect
 def get_users_filtered_by_role(course_id):
-    ''' filter and get course users'''
+    """ filter and get course users"""
 
     response = GET(
         '{}/{}/{}/roles'.format(
@@ -316,7 +316,7 @@ def get_users_filtered_by_role(course_id):
 
 @api_error_protect
 def get_course_content_groups(course_id, content_id):
-    ''' fetch associates groups to specific content within specific course '''
+    """ fetch associates groups to specific content within specific course """
     response = GET(
         '{}/{}/{}/content/{}/groups'.format(
             settings.API_SERVER_ADDRESS,
@@ -331,7 +331,7 @@ def get_course_content_groups(course_id, content_id):
 
 @api_error_protect
 def get_course_completions(course_id, user_id=None):
-    ''' fetch course module completion list '''
+    """ fetch course module completion list """
     qs_params = {"page_size": 0}
     if user_id:
         qs_params["user_id"] = user_id
@@ -349,7 +349,7 @@ def get_course_completions(course_id, user_id=None):
 
 @api_error_protect
 def get_course_metrics(course_id, *args, **kwargs):
-    ''' retrieves course metrics '''
+    """ retrieves course metrics """
 
     qs_params = {}
 
@@ -372,7 +372,7 @@ def get_course_metrics(course_id, *args, **kwargs):
 
 @api_error_protect
 def get_course_metrics_by_city(course_id, cities=None):
-    ''' retrieves course metrics '''
+    """ retrieves course metrics """
     qs_params = {"page_size": 0}
     if cities:
         qs_params["city"] = cities
@@ -390,7 +390,7 @@ def get_course_metrics_by_city(course_id, cities=None):
 
 @api_error_protect
 def get_course_metrics_grades(course_id, grade_object_type=JsonObject, **kwargs):
-    ''' retrieves users who are leading in terms of points_scored'''
+    """ retrieves users who are leading in terms of points_scored"""
 
     qs_params = {"count": 3}
     qs_params.update(kwargs)
@@ -408,7 +408,7 @@ def get_course_metrics_grades(course_id, grade_object_type=JsonObject, **kwargs)
 
 @api_error_protect
 def get_course_metrics_completions(course_id, completions_object_type=JsonObject, **kwargs):
-    ''' retrieves users who are leading in terms of  course module completions '''
+    """ retrieves users who are leading in terms of  course module completions """
 
     qs_params = {"count": 3}
     qs_params.update(kwargs)
@@ -426,7 +426,7 @@ def get_course_metrics_completions(course_id, completions_object_type=JsonObject
 
 @api_error_protect
 def get_course_social_metrics(course_id, organization_id=None):
-    ''' fetch social metrics for course '''
+    """ fetch social metrics for course """
     qs_params = {}
     if organization_id:
         qs_params['organization'] = organization_id
@@ -452,7 +452,7 @@ def get_course_time_series_metrics(
         *args,
         **kwargs
 ):
-    ''' a list of Metrics for the specified Course in time series format '''
+    """ a list of Metrics for the specified Course in time series format """
     qs_params = {
         'start_date': start_date,
         'end_date': end_date
@@ -472,7 +472,7 @@ def get_course_time_series_metrics(
 
 @api_error_protect
 def get_course_projects(course_id, page_size=0, project_object=JsonObject):
-    ''' Fetches all the project objects for the course '''
+    """ Fetches all the project objects for the course """
 
     qs_params = {"page_size": page_size}
     url = '{}/{}/{}/projects/?{}'.format(
@@ -488,7 +488,7 @@ def get_course_projects(course_id, page_size=0, project_object=JsonObject):
 
 @api_error_protect
 def get_module_details(module_uri, include_fields=[], module_object=None):
-    ''' Fetches the details of the object at the specific uri with the named custom fields'''
+    """ Fetches the details of the object at the specific uri with the named custom fields"""
 
     qs_params = {"include_fields": ",".join(include_fields)} if len(include_fields) > 0 else None
 
@@ -505,7 +505,7 @@ def get_module_details(module_uri, include_fields=[], module_object=None):
 
 @api_error_protect
 def get_course_content_detail(course_id, content_id, include_fields=[], module_object=None):
-    ''' Fetches the details of the object at the specific uri with the named custom fields'''
+    """ Fetches the details of the object at the specific uri with the named custom fields"""
 
     url = '{}/{}/{}/content/{}'.format(
         settings.API_SERVER_ADDRESS,

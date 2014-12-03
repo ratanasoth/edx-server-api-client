@@ -1,4 +1,4 @@
-''' Tests for api_client calls '''
+""" Tests for api_client calls """
 from datetime import datetime
 import collections
 
@@ -56,9 +56,9 @@ class JsonObjectTestUntouchedClass(JsonObject):
 
 class JsonObjectTest(TestCase):
     def setUp(self):
-        '''
+        """
         Setup json strings for objects and arrays
-        '''
+        """
         self.json_string = '{"name":"Martyn", "age":21}'
         self.json_array = '[{"name":"Martyn", "age":21},{"name":"Matt", "age":19}]'
 
@@ -78,9 +78,9 @@ class JsonObjectTest(TestCase):
         self.assertTrue(isinstance(output.user, UserResponse))
 
     def test_parsed_object_from_json(self):
-        '''
+        """
         Default behaviour yeilds base class JsonObject with appropriate fields
-        '''
+        """
         output = JP.from_json(self.json_string)
 
         self.assertTrue(isinstance(output, JsonObject))
@@ -88,9 +88,9 @@ class JsonObjectTest(TestCase):
         self.assertEqual(output.age, 21)
 
     def test_parsed_array_from_json(self):
-        '''
+        """
         Corresponding array of JsonObject objects
-        '''
+        """
         output = JP.from_json(self.json_array)
 
         self.assertTrue(isinstance(output, collections.Iterable))
@@ -103,9 +103,9 @@ class JsonObjectTest(TestCase):
         self.assertEqual(output[1].age, 19)
 
     def test_parsed_object_class(self):
-        '''
+        """
         When requesting specific class, result yeilds specific class
-        '''
+        """
         output = JP.from_json(
             self.json_string, JsonObjectTestRequiredFieldsClass)
 
@@ -113,9 +113,9 @@ class JsonObjectTest(TestCase):
         self.assertTrue(isinstance(output, JsonObjectTestRequiredFieldsClass))
 
     def test_parsed_array_object_class(self):
-        '''
+        """
         Corresponding array of requested specific class
-        '''
+        """
         output = JP.from_json(
             self.json_array, JsonObjectTestRequiredFieldsClass)
 
@@ -131,9 +131,9 @@ class JsonObjectTest(TestCase):
         self.assertEqual(output[1].age, 19)
 
     def test_missing_required_field(self):
-        '''
+        """
         If required field is missing, should have an exception
-        '''
+        """
         light_json = '{"name":"Martyn"}'
         output = JP.from_json(light_json)
 
@@ -144,10 +144,10 @@ class JsonObjectTest(TestCase):
             JP.from_json(light_json, JsonObjectTestRequiredFieldsClass)
 
     def test_valid_fields(self):
-        '''
+        """
         If valid fields are provided, only required and valid fields should be accessible
         No exception if json contains additional fields, but these are dropped from results
-        '''
+        """
         json_string = '{"name":"Martyn", "age":21, "gender":"male"}'
 
         output = JP.from_json(json_string, JsonObjectTestValidFieldsClass)
@@ -161,10 +161,10 @@ class JsonObjectTest(TestCase):
             output.gender
 
     def test_array_valid_fields(self):
-        '''
+        """
         If valid fields are provided, only required and valid fields should be accessible
         No exception if json contains additional fields, but these are dropped from results
-        '''
+        """
         json_string = ('[{"name":"Martyn", "age":21, "gender":"male"},'
                        '{"name":"Matt", "age":19, "sport":"mountaineering"}]')
 
@@ -230,18 +230,18 @@ class JsonObjectTest(TestCase):
         self.assertEqual(output.gender, "male")
 
     def test_nested_type(self):
-        '''
+        """
         Consider when object type is nested within another
-        '''
+        """
         output = JP.from_json(self.nested_json, JsonObjectTestNestingClass)
 
         self.assertTrue(isinstance(output, JsonObjectTestNestingClass))
         self.assertTrue(isinstance(output.info, JsonObjectTestNestedClass))
 
     def test_nested_array(self):
-        '''
+        """
         Consider when object type is nested within another
-        '''
+        """
         output = JP.from_json(self.nested_array, JsonObjectTestNestingClass)
 
         self.assertTrue(isinstance(output[0], JsonObjectTestNestingClass))
@@ -269,13 +269,13 @@ class JsonObjectTest(TestCase):
         self.assertTrue(output[0].name == "super_admin")
 
     def test_untouched_class(self):
-        json_string = '''
+        json_string = """
             {"scores": [
                [0.0, 1, false, "Interactive Questions"],
                [0.0, 1, false, "Perchance to Dream"],
                [0.0, 1, false, "Attributing Blame"]
             ]}
-        '''
+        """
         output = JP.from_json(json_string, JsonObjectTestUntouchedClass)
 
         self.assertTrue(isinstance(output, JsonObjectTestUntouchedClass))

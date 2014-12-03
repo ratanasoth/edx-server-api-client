@@ -1,4 +1,4 @@
-''' Objects for course gradebooks built from json responses from API '''
+""" Objects for course gradebooks built from json responses from API """
 
 from .json_object import DataOnly, JsonObject
 

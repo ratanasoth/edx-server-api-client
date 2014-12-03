@@ -1,4 +1,4 @@
-''' GET, POST, DELETE, PUT requests for json client '''
+""" GET, POST, DELETE, PUT requests for json client """
 import urllib2 as url_access
 import json
 
@@ -22,19 +22,19 @@ def json_headers():
 
 
 def GET(url_path):
-    ''' GET request wrapper to json web server '''
+    """ GET request wrapper to json web server """
     url_request = url_access.Request(url=url_path, headers=json_headers())
     return url_access.urlopen(url=url_request, timeout=TIMEOUT)
 
 
 def POST(url_path, data):
-    ''' POST request wrapper to json web server '''
+    """ POST request wrapper to json web server """
     url_request = url_access.Request(url=url_path, headers=json_headers())
     return url_access.urlopen(url_request, json.dumps(data), TIMEOUT)
 
 
 def DELETE(url_path, data=None):
-    ''' DELETE request wrapper to json web server '''
+    """ DELETE request wrapper to json web server """
     opener = url_access.build_opener(url_access.HTTPHandler)
     request = url_access.Request(url=url_path, headers=json_headers())
     request.get_method = lambda: 'DELETE'
@@ -43,7 +43,7 @@ def DELETE(url_path, data=None):
 
 
 def PUT(url_path, data):
-    ''' PUT request wrapper to json web server '''
+    """ PUT request wrapper to json web server """
     opener = url_access.build_opener(url_access.HTTPHandler)
     request = url_access.Request(
         url=url_path, headers=json_headers(), data=json.dumps(data))
@@ -52,7 +52,7 @@ def PUT(url_path, data):
 
 
 def PATCH(url_path, data):
-    ''' PATCH request wrapper to json web server '''
+    """ PATCH request wrapper to json web server """
     opener = url_access.build_opener(url_access.HTTPHandler)
     request = url_access.Request(
         url=url_path, headers=json_headers(), data=json.dumps(data))

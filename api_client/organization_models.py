@@ -1,4 +1,4 @@
-''' Objects for users / authentication built from json responses from API '''
+""" Objects for users / authentication built from json responses from API """
 from .json_object import JsonObject
 import organization_api
 
@@ -6,7 +6,7 @@ import organization_api
 class Organization(JsonObject):
     # required_fields = ["display_name", "contact_name", "contact_phone", "contact_email", ]
 
-    ''' object representing a organization from api json response '''
+    """ object representing a organization from api json response """
 
     @classmethod
     def create(cls, name, organization_data):

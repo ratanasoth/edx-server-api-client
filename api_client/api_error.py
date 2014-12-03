@@ -15,9 +15,9 @@ class ApiError(Exception):
     content_dictionary = {}
     http_error = None
 
-    '''
+    """
     Exception to be thrown when the Api returns an Http error
-    '''
+    """
 
     def __init__(self, thrown_error, function_name, error_code_messages=None, **call_context):
         # store the code and
@@ -63,9 +63,9 @@ class ApiError(Exception):
 
 
 def api_error_protect(func):
-    '''
+    """
     Decorator which will raise an ApiError for api calls
-    '''
+    """
 
     @functools.wraps(func)
     def call_api_method(*args, **kwargs):

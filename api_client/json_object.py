@@ -1,4 +1,4 @@
-''' Base classes to read json responses into objects '''
+""" Base classes to read json responses into objects """
 import json
 import collections
 
@@ -13,9 +13,9 @@ class DataOnly(object):
 # don't need a public method because they inherit from the base implementation
 # pylint: disable=too-few-public-methods
 class Objectifier(object):
-    '''
+    """
     Class to build class-instance accessors from provided dictionary object
-    '''
+    """
     object_map = {}
 
     def _make_data_object(self, value, object_type):
@@ -28,7 +28,7 @@ class Objectifier(object):
         self._build_from_dictionary(dictionary)
 
     def _build_from_dictionary(self, dictionary):
-        ''' Set the attributes of the object from the given dictionary '''
+        """ Set the attributes of the object from the given dictionary """
         for item in dictionary:
             if isinstance(dictionary[item], dict):
                 self.__setattr__(
@@ -47,10 +47,10 @@ class Objectifier(object):
                 self.__setattr__(item, dictionary[item])
 
     def _object_type_for_name(self, item_name, item_dictionary):
-        '''
+        """
         Configure object types in child classes; used when we desire a
         child object for an attribute instead of default Objectifier object
-        '''
+        """
         object_type = Objectifier
         if item_name in self.object_map:
             object_type = self.object_map[item_name]
@@ -59,9 +59,9 @@ class Objectifier(object):
 
 
 class MissingRequiredFieldError(Exception):
-    '''
+    """
     Exception to be thrown when a required field is missing
-    '''
+    """
 
     def __init__(self, value):
         self.value = value
@@ -72,7 +72,7 @@ class MissingRequiredFieldError(Exception):
 
 
 def _build_date_field(json_date_string_value):
-    ''' converts json date string to date object '''
+    """ converts json date string to date object """
     if json_date_string_value is None:
         return None
 
@@ -96,7 +96,7 @@ def _build_date_field(json_date_string_value):
 # Can create one of these, and add some class-specific checks for required
 # values, even strip bad values
 class JsonObject(Objectifier):
-    '''
+    """
     Create an python object from a json object
     Can inherit from this class if you like, specifying member overrides
         required_fields - list of field names that must be present to
@@ -105,7 +105,7 @@ class JsonObject(Objectifier):
             want to strip unexpected fields from the generate object
     Alternatively, just instantiate one of these from a dictionary object
         instead of json
-    '''
+    """
     required_fields = []
     valid_fields = None
     date_fields = []
@@ -124,10 +124,10 @@ class JsonObject(Objectifier):
             # self._build_from_dictionary(dictionary)
 
     def _validate_fields(self, dictionary):
-        '''
+        """
         Ensures that generated class has required_fields and,
         if specified, that only valid_fields remain
-        '''
+        """
         for required in self.required_fields:
             if required not in dictionary:
                 raise MissingRequiredFieldError(required)
@@ -141,14 +141,14 @@ class JsonObject(Objectifier):
 
 
 class JsonParser(object):
-    '''
+    """
     JsonParser static class to initiate parsing of json into specific
     JsonObject impementations
-    '''
+    """
 
     @staticmethod
     def from_json(json_data, object_type=JsonObject, data_filter=None):
-        ''' takes json => dictionary / array and processes it accordingly '''
+        """ takes json => dictionary / array and processes it accordingly """
         parsed_json = json.loads(json_data)
         return JsonParser.from_dictionary(parsed_json, object_type, data_filter)
 
@@ -179,10 +179,10 @@ class CategorisedJsonObject(JsonObject):
         )
 
     def _object_type_for_name(self, item_name, item_dictionary):
-        '''
+        """
         Configure object types in child classes; used when we desire a
         child object for an attribute instead of default Objectifier object
-        '''
+        """
         object_type = CategorisedJsonObject
         if self._categorised_parser and self._categorised_parser._category_property_name in item_dictionary:
             object_type = self._categorised_parser._category_dictionary[
@@ -212,11 +212,11 @@ class CategorisedJsonParser(object):
         self._category_property_name = category_property_name
 
     def from_json(self, json_data):
-        ''' takes json => dictionary / array and processes it accordingly '''
+        """ takes json => dictionary / array and processes it accordingly """
         return self.from_dictionary(json.loads(json_data))
 
     def from_dictionary(self, parsed_json):
-        ''' takes dictionary / array and processes it accordingly '''
+        """ takes dictionary / array and processes it accordingly """
         if isinstance(parsed_json, list):
             out_objects = []
             for json_dictionary in parsed_json:

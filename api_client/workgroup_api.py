@@ -1,4 +1,4 @@
-''' API calls with respect to groups '''
+""" API calls with respect to groups """
 from django.conf import settings
 
 from .api_error import api_error_protect
@@ -13,7 +13,7 @@ WORKGROUP_API = getattr(settings, 'WORKGROUP_API', 'api/server/workgroups')
 
 @api_error_protect
 def get_workgroups(group_object=JsonObject):
-    ''' gets all workgroups'''
+    """ gets all workgroups"""
     response = GET(
         '{}/{}/'.format(
             settings.API_SERVER_ADDRESS,
@@ -26,13 +26,13 @@ def get_workgroups(group_object=JsonObject):
 
 @api_error_protect
 def get_workgroups_for_project(project_id):
-    ''' gets all workgourps for a specific project_id'''
+    """ gets all workgourps for a specific project_id"""
     return [wg for wg in get_workgroups() if wg.project == project_id]
 
 
 @api_error_protect
 def get_workgroup(workgroup_id, group_object=JsonObject):
-    ''' fetch workgroup by id '''
+    """ fetch workgroup by id """
     response = GET(
         '{}/{}/{}/'.format(
             settings.API_SERVER_ADDRESS,
@@ -46,7 +46,7 @@ def get_workgroup(workgroup_id, group_object=JsonObject):
 
 @api_error_protect
 def delete_workgroup(workgroup_id):
-    ''' delete workgroup by id '''
+    """ delete workgroup by id """
     response = DELETE(
         '{}/{}/{}/'.format(
             settings.API_SERVER_ADDRESS,
@@ -60,7 +60,7 @@ def delete_workgroup(workgroup_id):
 
 @api_error_protect
 def create_workgroup(workgroup_name, workgroup_data, group_object=JsonObject):
-    ''' create a new workgroup '''
+    """ create a new workgroup """
 
     data = workgroup_data
     data["name"] = workgroup_name
@@ -78,7 +78,7 @@ def create_workgroup(workgroup_name, workgroup_data, group_object=JsonObject):
 
 @api_error_protect
 def update_workgroup(workgroup_id, workgroup_data, group_object=JsonObject):
-    ''' update existing workgroup '''
+    """ update existing workgroup """
     response = PATCH(
         '{}/{}/{}/'.format(
             settings.API_SERVER_ADDRESS,

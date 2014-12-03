@@ -1,4 +1,4 @@
-''' Objects for users / authentication built from json responses from API '''
+""" Objects for users / authentication built from json responses from API """
 import json
 
 from .json_object import JsonObject
@@ -10,7 +10,7 @@ from .json_object import JsonObject
 
 
 class UserResponse(JsonObject):
-    ''' object representing a user from api json response '''
+    """ object representing a user from api json response """
     required_fields = ["email", "username"]
     date_fields = ["created"]
 
@@ -21,18 +21,18 @@ class UserResponse(JsonObject):
 
     @property
     def formatted_name(self):
-        ''' returns formatted name from first name and last name unless first name is defined'''
+        """ returns formatted name from first name and last name unless first name is defined"""
         if hasattr(self, "full_name"):
             return self.full_name
 
         return "{} {}".format(self.first_name, self.last_name)
 
     def to_json(self):
-        ''' return UserResponse object as json '''
+        """ return UserResponse object as json """
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        ''' return UserResponse object as dict '''
+        """ return UserResponse object as dict """
         unserializable_fields = ['uri', 'resources', 'created']
         user = {}
         for field, value in self.__dict__.iteritems():
@@ -44,7 +44,7 @@ class UserResponse(JsonObject):
 
 
 class AuthenticationResponse(JsonObject):
-    ''' object representing an authenticated session from api json response '''
+    """ object representing an authenticated session from api json response """
     required_fields = ['token', 'user']
     object_map = {
         "user": UserResponse
@@ -52,7 +52,7 @@ class AuthenticationResponse(JsonObject):
 
 
 class UserCourseStatus(JsonObject):
-    ''' object representing a user's course status from api json response '''
+    """ object representing a user's course status from api json response """
     required_fields = ["position"]
 
 
