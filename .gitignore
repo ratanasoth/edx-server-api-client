@@ -1,0 +1,7 @@
+.*
+*.py[cod]
+*.sqlite3
+*.esproj
+private.py
+Gemfile.lock
+tracking.log
