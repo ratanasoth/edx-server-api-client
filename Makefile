@@ -1,6 +1,6 @@
 ROOT = $(shell echo "$$PWD")
 COVERAGE = $(ROOT)/build/coverage
-PACKAGE = api_client
+PACKAGE = edx_server_api_client
 
 validate: test.requirements test quality
 
