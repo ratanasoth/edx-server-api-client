@@ -1,7 +1,13 @@
 edX Server API Client |build-status| |coverage-status|
 =========================================================
 
-The edX Server API Client (henceforth, client) allows users to retrieve data from the edX LMS.
+The edX Server API Client (henceforth, client) allows users to retrieve data from the edX LMS. The current version
+supports the retrieval of course info. Future iterations may add support for user, group, and other resources as needed.
+
+This client is a very thin wrapper around the `Slumber`_ library. Please refer to the
+Slumber documentation regarding how to make use of the ``Client.courses`` attribute.
+
+..  _Slumber: http://slumber.readthedocs.org/
 
 Testing
 -------

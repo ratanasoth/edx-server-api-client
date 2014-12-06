@@ -1,13 +1,17 @@
 ROOT = $(shell echo "$$PWD")
 COVERAGE = $(ROOT)/build/coverage
-PACKAGE = edx_server_api_client
+PACKAGE = edx_api_client
 
 validate: test.requirements test quality
 
 test.requirements:
 	pip install -q -r requirements.txt
 
-test:
+clean:
+	find . -name '*.pyc' -delete
+	coverage erase
+
+test: clean
 	nosetests --with-coverage --cover-inclusive --cover-branches \
 		--cover-html --cover-html-dir=$(COVERAGE)/html/ \
 		--cover-xml --cover-xml-file=$(COVERAGE)/coverage.xml \
@@ -16,6 +20,4 @@ test:
 quality:
 	pep8 --config=.pep8 $(PACKAGE)
 	pylint --rcfile=.pylintrc $(PACKAGE)
-
-	# Ignore module level docstrings and all test files
 	pep257 --ignore=D100,D203 --match='(?!test).*py' $(PACKAGE)
