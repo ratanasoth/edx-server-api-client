@@ -22,7 +22,7 @@ Contributions are very welcome, but for legal reasons, you must submit a signed
 `CONTRIBUTING`_ file for more information -- it also contains guidelines for how to maintain
 high code quality, which will make your contribution more likely to be accepted.
 
-.. _individual contributor's agreement: http://code.edx.org/individual-contributor-agreement.pdf
+.. _individual contributor's agreement: https://open.edx.org/sites/default/files/wysiwyg/individual-contributor-agreement.pdf
 .. _CONTRIBUTING: https://github.com/edx/edx-platform/blob/master/CONTRIBUTING.rst
 
 .. |build-status| image:: https://travis-ci.org/edx/edx-server-api-client.svg?branch=master
